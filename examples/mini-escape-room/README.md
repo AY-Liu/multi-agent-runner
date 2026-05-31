@@ -12,19 +12,30 @@ The leader monitors the groups, checks whether their outputs fit together, and w
 
 ## Run It
 
-From this example directory:
+From a fresh clone, enter this example and copy its task files to the project root:
 
 ```bash
-bash run-demo.sh codex
+cd examples/mini-escape-room
+cp leader.md ../../leader.md
+cp inbox.md ../../inbox.md
+cd ../..
 ```
 
-For Claude:
+Run with Codex:
 
 ```bash
-bash run-demo.sh claude
+./run.sh --provider codex --reset
+./run.sh --provider codex --effort low
 ```
 
-The script temporarily copies this example's `leader.md` and `inbox.md` into the repository root, runs the harness, then restores your original root files.
+Or run with Claude:
+
+```bash
+./run.sh --provider claude --reset
+./run.sh --provider claude
+```
+
+This is the normal workflow: put the initial task and coordination method in root `leader.md`, put follow-up input in root `inbox.md`, then run `run.sh`.
 
 The final report should be written to:
 

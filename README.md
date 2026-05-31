@@ -9,6 +9,11 @@ The project keeps one shared control plane for task orchestration, state trackin
 
 > Status: experimental. This repository is intended for people who already use Codex or Claude Code locally and want a simple script-based agent-team harness.
 
+## Design Principles
+
+- **Use Codex and Claude Code directly.** multi-agent-runner uses the non-API, non-SDK CLI workflow of Codex and Claude Code. If you already work with these tools locally, you can migrate your existing habits into an agent-team workflow without setting up provider APIs or SDK clients.
+- **Wake the scheduler repeatedly.** The design borrows the OpenClaw-style principle of waking the scheduling leader at intervals. The leader can inspect agent state, handle finished or stuck workers, launch follow-up work, and keep the whole team running without requiring one long blocking prompt.
+
 ## Simplest Use
 
 If you just want to run an agent team:
@@ -46,21 +51,30 @@ The quickest way to understand the project is the mini escape room demo. It asks
 - `story_group`: designs the story, clue sequence, and host script.
 - `operations_group`: designs setup, timing, and fallback rules.
 
-Run it from the example directory:
+From a fresh clone, enter the example and copy its task files to the project root:
 
 ```bash
 cd examples/mini-escape-room
-bash run-demo.sh codex
+cp leader.md ../../leader.md
+cp inbox.md ../../inbox.md
+cd ../..
+```
+
+Run it with Codex:
+
+```bash
+./run.sh --provider codex --reset
+./run.sh --provider codex --effort low
 ```
 
 Or with Claude:
 
 ```bash
-cd examples/mini-escape-room
-bash run-demo.sh claude
+./run.sh --provider claude --reset
+./run.sh --provider claude
 ```
 
-The demo script temporarily installs the example task, runs the harness, then restores your original root `leader.md` and `inbox.md`.
+This is the normal workflow: put the initial task and coordination method in root `leader.md`, put follow-up input in root `inbox.md`, then run `run.sh`.
 
 Expected output:
 

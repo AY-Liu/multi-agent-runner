@@ -7,7 +7,10 @@ multi-agent-runner 是一个轻量的多 Agent 调度框架，可以用同一套
 
 这个项目的目标不是做复杂平台，而是提供一个可以直接 clone、直接运行、方便改造的脚本型 agent team harness。它把任务编排、状态管理、重试、输出收集放在共享层，把 Codex 和 Claude 的差异收敛到 `providers/` 目录里。
 
-> 当前状态：实验性项目。适合已经在本机安装并登录 Codex 或 Claude Code 的用户。
+## 设计原则
+
+- **直接使用 Codex 和 Claude Code。** multi-agent-runner 采用的是 Codex 和 Claude Code 的 non-API、non-SDK CLI 工作流，不需要接 API 或 SDK。对于已经习惯在本地使用 Codex 和 Claude Code 的人来说，可以很自然地迁移到 agent team 工作流。
+- **周期性唤醒调度 agent。** 设计借鉴了 OpenClaw 的原则：每隔一段时间唤醒一次负责调度的 leader。leader 会检查 agent 状态、处理已完成或卡住的 worker、启动后续任务，让整个 agent team 可以持续运行，而不是依赖一次很长的阻塞式提示。
 
 ## 最简单用法
 
@@ -40,27 +43,36 @@ multi-agent-runner 是一个轻量的多 Agent 调度框架，可以用同一套
 
 ## 试试 Demo
 
-最快理解这个项目的方法，是运行迷你密室逃脱 demo。它会让 leader 调度三个并行小组：
+最快理解这个项目的方法，是跑一下迷你密室逃脱 demo。它会让 leader 调度三个并行小组：
 
 - `puzzle_group`：设计谜题、答案和提示。
 - `story_group`：设计剧情、线索顺序和主持人台词。
 - `operations_group`：设计布置、时间安排和兜底规则。
 
-从示例目录运行：
+在一个新 clone 的项目里，进入示例目录，把示例任务文件复制到根目录：
 
 ```bash
 cd examples/mini-escape-room
-bash run-demo.sh codex
+cp leader.md ../../leader.md
+cp inbox.md ../../inbox.md
+cd ../..
 ```
 
-使用 Claude：
+用 Codex 运行：
 
 ```bash
-cd examples/mini-escape-room
-bash run-demo.sh claude
+./run.sh --provider codex --reset
+./run.sh --provider codex --effort low
 ```
 
-demo 脚本会临时安装示例任务，运行 harness，然后恢复根目录原来的 `leader.md` 和 `inbox.md`。
+或者用 Claude 运行：
+
+```bash
+./run.sh --provider claude --reset
+./run.sh --provider claude
+```
+
+这就是正常用法：把初始任务和调度方法写到根目录 `leader.md`，把后续输入写到根目录 `inbox.md`，然后运行 `run.sh`。
 
 预期输出：
 

@@ -38,6 +38,38 @@ multi-agent-runner 是一个轻量的多 Agent 调度框架，可以用同一套
 
 一句话：`leader.md` 写初始任务和团队调度方法，`inbox.md` 用于任务结束后的继续对话，`run.sh` 启动整个 harness。
 
+## 试试 Demo
+
+最快理解这个项目的方法，是运行迷你密室逃脱 demo。它会让 leader 调度三个并行小组：
+
+- `puzzle_group`：设计谜题、答案和提示。
+- `story_group`：设计剧情、线索顺序和主持人台词。
+- `operations_group`：设计布置、时间安排和兜底规则。
+
+从示例目录运行：
+
+```bash
+cd examples/mini-escape-room
+bash run-demo.sh codex
+```
+
+使用 Claude：
+
+```bash
+cd examples/mini-escape-room
+bash run-demo.sh claude
+```
+
+demo 脚本会临时安装示例任务，运行 harness，然后恢复根目录原来的 `leader.md` 和 `inbox.md`。
+
+预期输出：
+
+```text
+output/mini_escape_room_demo.md
+```
+
+仓库里也保留了一份 Codex 参考输出：`examples/mini-escape-room/codex-output.md`。
+
 ## 功能
 
 - 一个 leader agent 按 `leader.md` 拆解任务并调度 subagent。
@@ -165,52 +197,6 @@ CODEX_EXTRA_ARGS="..."                     # 传给 codex 的额外参数
 ```
 
 旧的 `CLAW_*` 环境变量仍然兼容。
-
-## 示例
-
-仓库里包含一个小 demo：`examples/mini-escape-room/`。
-
-这个 demo 会让 leader 设计一场 30 分钟的迷你密室逃脱，主题是 **失踪的生日蛋糕**。leader 会并行启动三个小组：
-
-- `puzzle_group`：设计谜题、答案和提示。
-- `story_group`：设计剧情、线索顺序和主持人台词。
-- `operations_group`：设计布置、时间安排和兜底规则。
-
-每个小组内部都有一个很短的前后工作流，leader 负责监控小组输出，最后汇总成一份完整方案。
-
-在仓库根目录运行 Codex demo：
-
-```bash
-cp leader.md leader.local.md
-cp inbox.md inbox.local.md
-cp examples/mini-escape-room/leader.md leader.md
-cp examples/mini-escape-room/inbox.md inbox.md
-
-./run.sh --provider codex --reset
-./run.sh --provider codex --effort low
-```
-
-运行 Claude demo：
-
-```bash
-./run.sh --provider claude --reset
-./run.sh --provider claude
-```
-
-结束后恢复你自己的本地任务文件：
-
-```bash
-mv leader.local.md leader.md
-mv inbox.local.md inbox.md
-```
-
-预期输出：
-
-```text
-output/mini_escape_room_demo.md
-```
-
-仓库里也保留了一份 Codex 参考输出：`examples/mini-escape-room/codex-output.md`。
 
 ## 项目结构
 

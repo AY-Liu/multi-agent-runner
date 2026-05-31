@@ -12,31 +12,19 @@ The leader monitors the groups, checks whether their outputs fit together, and w
 
 ## Run It
 
-From the repository root:
+From this example directory:
 
 ```bash
-cp leader.md leader.local.md
-cp inbox.md inbox.local.md
-cp examples/mini-escape-room/leader.md leader.md
-cp examples/mini-escape-room/inbox.md inbox.md
-
-./run.sh --provider codex --reset
-./run.sh --provider codex --effort low
+bash run-demo.sh codex
 ```
 
 For Claude:
 
 ```bash
-./run.sh --provider claude --reset
-./run.sh --provider claude
+bash run-demo.sh claude
 ```
 
-Restore your local files afterwards:
-
-```bash
-mv leader.local.md leader.md
-mv inbox.local.md inbox.md
-```
+The script temporarily copies this example's `leader.md` and `inbox.md` into the repository root, runs the harness, then restores your original root files.
 
 The final report should be written to:
 

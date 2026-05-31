@@ -38,6 +38,38 @@ After the first task is complete, write follow-up instructions or continuation m
 
 In short: `leader.md` contains the initial task and team coordination method, `inbox.md` is for continuing the conversation after a completed run, and `run.sh` starts the harness.
 
+## Try The Demo
+
+The quickest way to understand the project is the mini escape room demo. It asks the leader to coordinate three parallel groups:
+
+- `puzzle_group`: designs puzzles, answers, and hints.
+- `story_group`: designs the story, clue sequence, and host script.
+- `operations_group`: designs setup, timing, and fallback rules.
+
+Run it from the example directory:
+
+```bash
+cd examples/mini-escape-room
+bash run-demo.sh codex
+```
+
+Or with Claude:
+
+```bash
+cd examples/mini-escape-room
+bash run-demo.sh claude
+```
+
+The demo script temporarily installs the example task, runs the harness, then restores your original root `leader.md` and `inbox.md`.
+
+Expected output:
+
+```text
+output/mini_escape_room_demo.md
+```
+
+A reference Codex output is included at `examples/mini-escape-room/codex-output.md`.
+
 ## Features
 
 - One leader agent follows `leader.md`, plans work, and dispatches subagents.
@@ -165,52 +197,6 @@ CODEX_EXTRA_ARGS="..."                     # extra arguments passed to codex
 ```
 
 The older `CLAW_*` variable names are still supported for compatibility.
-
-## Examples
-
-The repository includes a small demo at `examples/mini-escape-room/`.
-
-It asks the leader to design a 30-minute mini escape room called **The Missing Birthday Cake**. The leader launches three groups in parallel:
-
-- `puzzle_group`: creates puzzles, answers, and hints.
-- `story_group`: creates the story, clue sequence, and host script.
-- `operations_group`: creates setup, timing, and fallback rules.
-
-Each group has its own short internal workflow, and the leader monitors the groups before writing one final report.
-
-Run the Codex demo from the repository root:
-
-```bash
-cp leader.md leader.local.md
-cp inbox.md inbox.local.md
-cp examples/mini-escape-room/leader.md leader.md
-cp examples/mini-escape-room/inbox.md inbox.md
-
-./run.sh --provider codex --reset
-./run.sh --provider codex --effort low
-```
-
-Run the Claude demo:
-
-```bash
-./run.sh --provider claude --reset
-./run.sh --provider claude
-```
-
-Restore your own local task files afterwards:
-
-```bash
-mv leader.local.md leader.md
-mv inbox.local.md inbox.md
-```
-
-Expected output:
-
-```text
-output/mini_escape_room_demo.md
-```
-
-A reference Codex output is included at `examples/mini-escape-room/codex-output.md`.
 
 ## Project Layout
 

@@ -1,0 +1,44 @@
+# Runtime state and generated artifacts
+agents/
+logs/
+output/
+state/
+tmp/
+prompts/roles/
+
+# Provider/session artifacts
+session_id
+session_id.*
+latest.json
+latest.jsonl
+stderr.log
+exit_code
+*.jsonl
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
